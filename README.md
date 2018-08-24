@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/webpack-fix-style-only-entries.svg)](https://www.npmjs.com/package/webpack-fix-style-only-entries)
+
 # webpack-fix-style-only-entries
 
 This is a small plugin developed to solve the problem of having a style only entry (css/sass/less) generating an extra [name].js file.
@@ -11,6 +13,10 @@ You can find more info by reading the following issues:
 It just find js files from chunks of css only entries and remove the js file rom the compilation.
 
 ## How to use
+install using your package manager of choice:
+ - npm: `npm install -D webpack-fix-style-only-entries`
+ - yarn: `yarn add -D webpack-fix-style-only-entries`
+
 Require and add to webpack.config plugins.
 
 Warning: this plugin does not load styles or split your bundles, it just fix chunks of css only entries by removing the (almost) empty js file.
