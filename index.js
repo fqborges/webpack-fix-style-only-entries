@@ -21,10 +21,10 @@ class WebpackFixStyleOnlyEntriesPlugin {
               chunk.entryModule.dependencies &&
               chunk.entryModule.dependencies.length
             ) {
-              const modules = chunk.entryModule.dependencies.map(
-                dep => dep.module
-              );
-              resources = modules.map(m => m.resource);
+              const modulesWithResources = chunk.entryModule.dependencies
+                .map(dep => dep.module)
+                .filter(m => m && m.resource);
+              resources = modulesWithResources.map(m => m.resource);
             }
           }
 
