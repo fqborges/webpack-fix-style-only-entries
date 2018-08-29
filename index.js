@@ -35,7 +35,9 @@ class WebpackFixStyleOnlyEntriesPlugin {
               )
             ) {
               if (file.endsWith(".js")) {
-                console.log("webpack-fix-style-only-entries: removing js from style only module: " + file);
+                if (!options.silent) {
+                  console.log("webpack-fix-style-only-entries: removing js from style only module: " + file);
+                }
                 chunk.files = chunk.files.filter(f => f != file);
                 delete compilation.assets[file];
               }
