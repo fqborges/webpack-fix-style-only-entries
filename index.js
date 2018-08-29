@@ -1,15 +1,20 @@
 const NAME = "webpack-fix-style-only-entries";
 
+const defaultOptions = {
+  extensions: ["less", "scss", "css"],
+  silent: false,
+}
+
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
     this.apply = this.apply.bind(this);
 
-    options = options || {};
-    let extensions = options.extensions || ["less", "scss", "css"];
-    this.extensions = extensions.map(e => (e[0] === "." ? e : "." + e));
+    this.options = Object.assign({}, defaultOptions, options);
   }
 
   apply(compiler) {
+    const extensionsWithDots = this.options.extensions.map(e => (e[0] === "." ? e : "." + e));
+
     compiler.hooks.compilation.tap(NAME, compilation => {
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
         if (chunk.hasEntryModule()) {
@@ -31,11 +36,11 @@ class WebpackFixStyleOnlyEntriesPlugin {
           if (resources) {
             if (
               resources.every(resource =>
-                this.extensions.find(ext => resource.endsWith(ext))
+                extensionsWithDots.find(ext => resource.endsWith(ext))
               )
             ) {
               if (file.endsWith(".js")) {
-                if (!options.silent) {
+                if (!this.options.silent) {
                   console.log("webpack-fix-style-only-entries: removing js from style only module: " + file);
                 }
                 chunk.files = chunk.files.filter(f => f != file);
