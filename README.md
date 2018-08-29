@@ -1,16 +1,18 @@
 [![npm version](https://badge.fury.io/js/webpack-fix-style-only-entries.svg)](https://www.npmjs.com/package/webpack-fix-style-only-entries)
 
-# webpack-fix-style-only-entries
+# [webpack-fix-style-only-entries](https://www.npmjs.com/package/webpack-fix-style-only-entries)
 
-This is a small plugin developed to solve the problem of having a style only entry (css/sass/less) generating an extra [name].js file.
+This is a small plugin developed to solve the problem of having a style only entry (css/sass/less) generating an extra js file.
 
 You can find more info by reading the following issues:
 
  - https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/518
  - https://github.com/webpack-contrib/mini-css-extract-plugin/issues/151
 
+View on: [Github](https://github.com/fqborges/webpack-fix-style-only-entries) - [npm](https://www.npmjs.com/package/webpack-fix-style-only-entries)
+
 ## How it works
-It just find js files from chunks of css only entries and remove the js file rom the compilation.
+It just find js files from chunks of css only entries and remove the js file from the compilation.
 
 ## How to use
 install using your package manager of choice:
