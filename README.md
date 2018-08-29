@@ -58,3 +58,4 @@ module.exports = {
    - default: ["less", "scss", "css"]
    - optional
    - Example: to identify only 'foo' and 'bar' extensions as styles: `new FixStyleOnlyEntriesPlugin({ extensions:['foo', 'bar'] }),`
+ - silent: `true` to supress logs to console
