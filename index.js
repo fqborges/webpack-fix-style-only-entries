@@ -33,7 +33,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
             }
           }
 
-          if (resources) {
+          if (resources && resources.length) {
             if (
               resources.every(resource =>
                 extensionsWithDots.find(ext => resource.endsWith(ext))
