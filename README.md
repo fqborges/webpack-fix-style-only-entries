@@ -53,9 +53,12 @@ module.exports = {
 ```
 
 ### Options
- - extensions: file extensions for styles.
-   - type: Array[string]
-   - default: ["less", "scss", "css"]
-   - optional
-   - Example: to identify only 'foo' and 'bar' extensions as styles: `new FixStyleOnlyEntriesPlugin({ extensions:['foo', 'bar'] }),`
- - silent: `true` to supress logs to console
+ 
+| Name       | Type          | Default                 | Description |
+|------------|---------------|-------------------------|-------------|
+| extensions | Array[string] | ["less", "scss", "css"] | file extensions for styles |
+| silent     | boolean       | false                   | supress logs to console    |
+
+#### Example config:
+    // to identify only 'foo' and 'bar' extensions as styles
+    new FixStyleOnlyEntriesPlugin({ extensions:['foo', 'bar'] }),
