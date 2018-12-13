@@ -52,13 +52,18 @@ module.exports = {
 };
 ```
 
-### Options
+## Options
  
 | Name       | Type          | Default                 | Description |
 |------------|---------------|-------------------------|-------------|
 | extensions | Array[string] | ["less", "scss", "css"] | file extensions for styles |
 | silent     | boolean       | false                   | supress logs to console    |
 
-#### Example config:
+### Example config:
     // to identify only 'foo' and 'bar' extensions as styles
     new FixStyleOnlyEntriesPlugin({ extensions:['foo', 'bar'] }),
+
+## Recipes
+
+### I use a javascript entry to styles:
+Give an especial extension to your file (`.css.js` for example) and configure `new FixStyleOnlyEntriesPlugin({ extensions:['css.js'] })`. See: https://github.com/fqborges/webpack-fix-style-only-entries/issues/8.
