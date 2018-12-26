@@ -3,7 +3,7 @@ const NAME = "webpack-fix-style-only-entries";
 const defaultOptions = {
   extensions: ["less", "scss", "css"],
   silent: false,
-}
+};
 
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
@@ -13,7 +13,9 @@ class WebpackFixStyleOnlyEntriesPlugin {
   }
 
   apply(compiler) {
-    const extensionsWithDots = this.options.extensions.map(e => (e[0] === "." ? e : "." + e));
+    const extensionsWithDots = this.options.extensions.map(e =>
+      e[0] === "." ? e : "." + e
+    );
 
     compiler.hooks.compilation.tap(NAME, compilation => {
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
@@ -41,7 +43,10 @@ class WebpackFixStyleOnlyEntriesPlugin {
             ) {
               if (file.endsWith(".js")) {
                 if (!this.options.silent) {
-                  console.log("webpack-fix-style-only-entries: removing js from style only module: " + file);
+                  console.log(
+                    "webpack-fix-style-only-entries: removing js from style only module: " +
+                      file
+                  );
                 }
                 chunk.files = chunk.files.filter(f => f != file);
                 delete compilation.assets[file];
