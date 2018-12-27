@@ -22,40 +22,43 @@ class WebpackFixStyleOnlyEntriesPlugin {
         if (!file.endsWith(".js")) return;
         if (!chunk.hasEntryModule()) return;
 
-        let resources;
-        if (typeof chunk.entryModule.resource == "string") {
-          resources = [chunk.entryModule.resource];
-        } else {
-          if (
-            chunk.entryModule.dependencies &&
-            chunk.entryModule.dependencies.length
-          ) {
-            const modulesWithResources = chunk.entryModule.dependencies
-              .map(dep => dep.module)
-              .filter(m => m && m.resource);
-            resources = modulesWithResources.map(m => m.resource);
+        const resources = collectEntryResources(chunk.entryModule);
+        const isStyleOnly =
+          resources.length &&
+          resources.every(resource =>
+            extensionsWithDots.find(ext => resource.endsWith(ext))
+          );
+        if (isStyleOnly) {
+          if (!this.options.silent) {
+            console.log(
+              "webpack-fix-style-only-entries: removing js from style only module: " +
+                file
+            );
           }
-        }
-
-        if (resources && resources.length) {
-          if (
-            resources.every(resource =>
-              extensionsWithDots.find(ext => resource.endsWith(ext))
-            )
-          ) {
-            if (!this.options.silent) {
-              console.log(
-                "webpack-fix-style-only-entries: removing js from style only module: " +
-                  file
-              );
-            }
-            chunk.files = chunk.files.filter(f => f != file);
-            delete compilation.assets[file];
-          }
+          chunk.files = chunk.files.filter(f => f != file);
+          delete compilation.assets[file];
         }
       });
     });
   }
+}
+
+function collectEntryResources(module, level = 0) {
+  if (typeof module.resource == "string") {
+    return [module.resource];
+  }
+
+  const resources = [];
+  if (module.dependencies) {
+    module.dependencies.forEach(dep => {
+      if (dep && dep.module) {
+        const depResources = collectEntryResources(dep.module, level + 1);
+        Array.prototype.push.apply(resources, depResources);
+      }
+    });
+  }
+
+  return resources;
 }
 
 module.exports = WebpackFixStyleOnlyEntriesPlugin;
