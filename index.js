@@ -30,7 +30,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
           );
         if (isStyleOnly) {
           if (!this.options.silent) {
-            console.log(
+            console.error(
               "webpack-fix-style-only-entries: removing js from style only module: " +
                 file
             );
