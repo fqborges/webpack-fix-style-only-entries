@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Package to fix style (css/sass/less) only entries generating a extra js file.",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "jest --detectOpenHandles"
   },
