@@ -51,8 +51,8 @@ function collectEntryResources(module, level = 0) {
   const resources = [];
   if (module.dependencies) {
     module.dependencies.forEach(dep => {
-      if (dep && dep.module) {
-        const depResources = collectEntryResources(dep.module, level + 1);
+      if (dep && (dep.module || dep.originModule)) {
+        const depResources = collectEntryResources(dep.module || dep.originModule, level + 1);
         Array.prototype.push.apply(resources, depResources);
       }
     });
