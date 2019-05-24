@@ -4,9 +4,11 @@ const defaultOptions = {
   extensions: ["less", "scss", "css"],
   silent: false,
 };
+const _collectedModules = [];
 
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
+    _collectedModules.length = 0;
     this.apply = this.apply.bind(this);
 
     this.options = Object.assign({}, defaultOptions, options);
@@ -52,8 +54,12 @@ function collectEntryResources(module, level = 0) {
   if (module.dependencies) {
     module.dependencies.forEach(dep => {
       if (dep && (dep.module || dep.originModule)) {
-        const depResources = collectEntryResources(dep.module || dep.originModule, level + 1);
-        Array.prototype.push.apply(resources, depResources);
+        const nextModule = dep.module || dep.originModule;
+        if (_collectedModules.indexOf(nextModule.id) === -1) {
+          _collectedModules.push(nextModule.id);
+          const depResources = collectEntryResources(nextModule, level + 1);
+          Array.prototype.push.apply(resources, depResources);
+        }
       }
     });
   }
