@@ -15,8 +15,16 @@ class WebpackFixStyleOnlyEntriesPlugin {
   }
 
   apply(compiler) {
-    const extensionsWithDots = this.options.extensions.map(e =>
-      e[0] === "." ? e : "." + e
+    const extensionsWithoutDots = this.options.extensions.map(e =>
+      e[0] === "." ? e.substring(1) : e
+    );
+
+    const patternOneOfExtensions = extensionsWithoutDots
+      .map(ext => escapeRegExp(ext))
+      .join("|");
+
+    const reStylesResource = new RegExp(
+      `[.](${patternOneOfExtensions})([?].*)?$`
     );
 
     compiler.hooks.compilation.tap(NAME, compilation => {
@@ -27,9 +35,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
         const resources = collectEntryResources(chunk.entryModule);
         const isStyleOnly =
           resources.length &&
-          resources.every(resource =>
-            extensionsWithDots.find(ext => resource.endsWith(ext))
-          );
+          resources.every(resource => reStylesResource.test(resource));
         if (isStyleOnly) {
           if (!this.options.silent) {
             console.error(
@@ -65,6 +71,16 @@ function collectEntryResources(module, level = 0) {
   }
 
   return resources;
+}
+
+// https://github.com/lodash/lodash/blob/4.17.11/lodash.js#L14274
+const reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+const reHasRegExpChar = RegExp(reRegExpChar.source);
+function escapeRegExp(string) {
+  string = String(string);
+  return string && reHasRegExpChar.test(string)
+    ? string.replace(reRegExpChar, "\\$&")
+    : string;
 }
 
 module.exports = WebpackFixStyleOnlyEntriesPlugin;
