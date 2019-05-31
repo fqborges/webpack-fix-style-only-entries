@@ -3,6 +3,7 @@ const NAME = "webpack-fix-style-only-entries";
 const defaultOptions = {
   extensions: ["less", "scss", "css"],
   silent: false,
+  ignore: undefined,
 };
 const _collectedModules = [];
 
@@ -32,7 +33,11 @@ class WebpackFixStyleOnlyEntriesPlugin {
         if (!file.endsWith(".js")) return;
         if (!chunk.hasEntryModule()) return;
 
-        const resources = collectEntryResources(chunk.entryModule);
+        const rawResources = collectEntryResources(chunk.entryModule);
+        const resources = this.options.ignore
+          ? rawResources.filter(r => !r.match(this.options.ignore))
+          : rawResources;
+
         const isStyleOnly =
           resources.length &&
           resources.every(resource => reStylesResource.test(resource));

@@ -27,6 +27,7 @@
     "moment": "^2.23.0",
     "rimraf": "^2.6.2",
     "webpack": "^4.28.2",
+    "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.1.5"
   }
 }
