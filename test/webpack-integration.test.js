@@ -45,7 +45,7 @@ describe("Webpack Integration Tests", () => {
             "expected.json"
           ));
           const outputs = fs.readdirSync(outputDirectory);
-          expect(expectations.sort()).toEqual(outputs.sort());
+          expect(outputs.sort()).toEqual(expectations.sort());
           done();
         });
       });
