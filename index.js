@@ -30,7 +30,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
 
     compiler.hooks.compilation.tap(NAME, compilation => {
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
-        if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
+        if (file.lastIndexOf(".js") < 0 && file.lastIndexOf(".mjs") < 0) return;
         if (!chunk.hasEntryModule()) return;
 
         const rawResources = collectEntryResources(chunk.entryModule);
