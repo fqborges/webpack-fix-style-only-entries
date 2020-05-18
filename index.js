@@ -28,6 +28,10 @@ class WebpackFixStyleOnlyEntriesPlugin {
       `[.](${patternOneOfExtensions})([?].*)?$`
     );
 
+    compiler.hooks.watchRun.tap(NAME, () =>{
+      _collectedModules.length = 0;
+    })
+
     compiler.hooks.compilation.tap(NAME, compilation => {
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
         if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
