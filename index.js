@@ -5,11 +5,11 @@ const defaultOptions = {
   silent: false,
   ignore: undefined,
 };
-const _collectedModules = [];
+
+let _entryResourcesCache = [];
 
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
-    _collectedModules.length = 0;
     this.apply = this.apply.bind(this);
 
     this.options = Object.assign({}, defaultOptions, options);
@@ -28,11 +28,12 @@ class WebpackFixStyleOnlyEntriesPlugin {
       `[.](${patternOneOfExtensions})([?].*)?$`
     );
 
-    compiler.hooks.watchRun.tap(NAME, () =>{
-      _collectedModules.length = 0;
-    })
+    compiler.hooks.watchRun.tap(NAME, () => {
+      _entryResourcesCache.length = 0;
+    });
 
     compiler.hooks.compilation.tap(NAME, compilation => {
+      _entryResourcesCache.length = 0;
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
         if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
         if (!chunk.hasEntryModule()) return;
@@ -61,8 +62,16 @@ class WebpackFixStyleOnlyEntriesPlugin {
 }
 
 function collectEntryResources(module, level = 0) {
+  // module.index is unique per compilation
+  // module.id can be null, not used here
+  if (_entryResourcesCache[module.index] !== undefined) {
+    return _entryResourcesCache[module.index];
+  }
+
   if (typeof module.resource == "string") {
-    return [module.resource];
+    const resources = [module.resource];
+    _entryResourcesCache[module.index] = resources;
+    return resources;
   }
 
   const resources = [];
@@ -70,15 +79,13 @@ function collectEntryResources(module, level = 0) {
     module.dependencies.forEach(dep => {
       if (dep && (dep.module || dep.originModule)) {
         const nextModule = dep.module || dep.originModule;
-        if (_collectedModules.indexOf(nextModule.id) === -1) {
-          _collectedModules.push(nextModule.id);
-          const depResources = collectEntryResources(nextModule, level + 1);
-          Array.prototype.push.apply(resources, depResources);
-        }
+        const depResources = collectEntryResources(nextModule, level + 1);
+        resources.push(...depResources);
       }
     });
   }
 
+  _entryResourcesCache[module.index] = resources;
   return resources;
 }
 
