@@ -2,7 +2,7 @@
 
 # [webpack-fix-style-only-entries](https://www.npmjs.com/package/webpack-fix-style-only-entries)
 
-This is a small plugin developed to solve the problem of having a style only entry (css/sass/less) generating an extra js file.
+This is a small plugin developed to solve the problem of having a style only entry (css/sass/less/stylus) generating an extra js file.
 
 You can find more info by reading the following issues:
 
@@ -54,11 +54,11 @@ module.exports = {
 
 ## Options
  
-| Name       | Type             | Default                 | Description |
-|------------|---------------   |-------------------------|-------------|
-| extensions | Array[string]    | ["less", "scss", "css"] | file extensions for styles      |
-| silent     | boolean          | false                   | supress logs to console         |
-| ignore     | string or RegExp | undefined               | match resource to be ignored    |
+| Name       | Type             | Default                                | Description |
+|------------|---------------   |----------------------------------------|-------------|
+| extensions | Array[string]    | ["less", "scss", "css", "styl","sass"] | file extensions for styles      |
+| silent     | boolean          | false                                  | supress logs to console         |
+| ignore     | string or RegExp | undefined                              | match resource to be ignored    |
 
 ### Example config:
     // to identify only 'foo' and 'bar' extensions as styles
