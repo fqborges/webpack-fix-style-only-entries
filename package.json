@@ -4,7 +4,8 @@
   "description": "Package to fix style (css/sass/less) only entries generating a extra js file.",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "LICENSE.txt"
   ],
   "scripts": {
     "test": "jest --detectOpenHandles"
