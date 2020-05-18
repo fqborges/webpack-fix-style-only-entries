@@ -1,7 +1,7 @@
 const NAME = "webpack-fix-style-only-entries";
 
 const defaultOptions = {
-  extensions: ["less", "scss", "css"],
+  extensions: ["less", "scss", "css", "sass", "styl"],
   silent: false,
   ignore: undefined,
 };
