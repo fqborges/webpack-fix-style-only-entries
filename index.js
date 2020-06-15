@@ -80,7 +80,9 @@ function collectEntryResources(module, level = 0) {
       if (dep && (dep.module || dep.originModule)) {
         const nextModule = dep.module || dep.originModule;
         const depResources = collectEntryResources(nextModule, level + 1);
-        resources.push(...depResources);
+        for (let index = 0, length = depResources.length; index !== length; index++) {
+          resources.push(depResources[index]);
+        }
       }
     });
   }
