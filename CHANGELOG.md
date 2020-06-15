@@ -1,3 +1,7 @@
+## 0.5.1 (Jun 13, 2020)
+ * Fix Maximum call stack size exceeded (PR [#34](https://github.com/fqborges/webpack-fix-style-only-entries/pull/34))
+ * Added CHANGELOG ([3e3767](https://github.com/fqborges/webpack-fix-style-only-entries/commit/3e3767d8998a53d807b5d5b10643d05b800aa79a))
+
 ## 0.5.0 (May 18, 2020)
 
  * fix for [#23](https://github.com/fqborges/webpack-fix-style-only-entries/issues/23) ([37d350](https://github.com/fqborges/webpack-fix-style-only-entries/commit/37d350eec83f49c0b12729a93aa6cf2f96d92d0b))
