@@ -76,12 +76,17 @@ function collectEntryResources(compilation, module, level = 0) {
 
   const resources = [];
   if (module.dependencies) {
+    const hasModuleGraphSupport = compilation.hasOwnProperty('moduleGraph');
     module.dependencies.forEach(dep => {
-      if (dep && (compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep))) {
-        const nextModule = compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep);
-        const depResources = collectEntryResources(compilation, nextModule, level + 1);
-        for (let index = 0, length = depResources.length; index !== length; index++) {
-          resources.push(depResources[index]);
+      if(dep) {
+        const module = hasModuleGraphSupport ? compilation.moduleGraph.getModule(dep) : dep.module;
+        const originModule = hasModuleGraphSupport ? compilation.moduleGraph.getParentModule(dep) : dep.originModule;
+        const nextModule = module || originModule;
+        if (nextModule) {
+          const depResources = collectEntryResources(compilation, nextModule, level + 1);
+          for (let index = 0, length = depResources.length; index !== length; index++) {
+            resources.push(depResources[index]);
+          }
         }
       }
     });
