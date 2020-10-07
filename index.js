@@ -77,7 +77,7 @@ function collectEntryResources(compilation, module, level = 0) {
   const resources = [];
   if (module.dependencies) {
     module.dependencies.forEach(dep => {
-      if (dep && (compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep)) {
+      if (dep && (compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep))) {
         const nextModule = compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep);
         const depResources = collectEntryResources(compilation, nextModule, level + 1);
         for (let index = 0, length = depResources.length; index !== length; index++) {
