@@ -38,7 +38,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
         if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
         if (!chunk.hasEntryModule()) return;
 
-        const rawResources = collectEntryResources(chunk.entryModule);
+        const rawResources = collectEntryResources(compilation, chunk.entryModule);
         const resources = this.options.ignore
           ? rawResources.filter(r => !r.match(this.options.ignore))
           : rawResources;
@@ -61,7 +61,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
   }
 }
 
-function collectEntryResources(module, level = 0) {
+function collectEntryResources(compilation, module, level = 0) {
   // module.index is unique per compilation
   // module.id can be null, not used here
   if (_entryResourcesCache[module.index] !== undefined) {
@@ -77,9 +77,9 @@ function collectEntryResources(module, level = 0) {
   const resources = [];
   if (module.dependencies) {
     module.dependencies.forEach(dep => {
-      if (dep && (dep.module || dep.originModule)) {
-        const nextModule = dep.module || dep.originModule;
-        const depResources = collectEntryResources(nextModule, level + 1);
+      if (dep && (compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep)) {
+        const nextModule = compilation.moduleGraph.getModule(dep) || compilation.moduleGraph.getParentModule(dep);
+        const depResources = collectEntryResources(compilation, nextModule, level + 1);
         for (let index = 0, length = depResources.length; index !== length; index++) {
           resources.push(depResources[index]);
         }
