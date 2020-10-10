@@ -35,7 +35,13 @@ describe("Webpack Integration Tests", () => {
             path: outputDirectory,
           },
         };
-        const config = merge(configDefaults, baseConfig);
+
+        let config;
+        if (Array.isArray(baseConfig)) {
+          config = baseConfig.map(c => merge(configDefaults, c));
+        } else {
+          config = merge(configDefaults, baseConfig);
+        }
 
         webpack(config, (err, stats) => {
           if (err) return done(err);
