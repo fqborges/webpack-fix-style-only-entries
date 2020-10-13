@@ -6,8 +6,6 @@ const defaultOptions = {
   ignore: undefined,
 };
 
-let _entryResourcesCache = [];
-
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
     this.apply = this.apply.bind(this);
@@ -28,17 +26,13 @@ class WebpackFixStyleOnlyEntriesPlugin {
       `[.](${patternOneOfExtensions})([?].*)?$`
     );
 
-    compiler.hooks.watchRun.tap(NAME, () => {
-      _entryResourcesCache.length = 0;
-    });
-
     compiler.hooks.compilation.tap(NAME, compilation => {
-      _entryResourcesCache.length = 0;
+      const resourcesCache = [];
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
         if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
         if (!chunk.hasEntryModule()) return;
 
-        const rawResources = collectEntryResources(compilation, chunk.entryModule);
+        const rawResources = collectEntryResources(compilation, chunk.entryModule, resourcesCache);
         const resources = this.options.ignore
           ? rawResources.filter(r => !r.match(this.options.ignore))
           : rawResources;
@@ -61,16 +55,16 @@ class WebpackFixStyleOnlyEntriesPlugin {
   }
 }
 
-function collectEntryResources(compilation, module, level = 0) {
+function collectEntryResources(compilation, module, cache, level = 0) {
   // module.index is unique per compilation
   // module.id can be null, not used here
-  if (_entryResourcesCache[module.index] !== undefined) {
-    return _entryResourcesCache[module.index];
+  if (cache[module.index] !== undefined) {
+    return cache[module.index];
   }
 
   if (typeof module.resource == "string") {
     const resources = [module.resource];
-    _entryResourcesCache[module.index] = resources;
+    cache[module.index] = resources;
     return resources;
   }
 
@@ -83,7 +77,7 @@ function collectEntryResources(compilation, module, level = 0) {
         const originModule = hasModuleGraphSupport ? compilation.moduleGraph.getParentModule(dep) : dep.originModule;
         const nextModule = module || originModule;
         if (nextModule) {
-          const depResources = collectEntryResources(compilation, nextModule, level + 1);
+          const depResources = collectEntryResources(compilation, nextModule, cache, level + 1);
           for (let index = 0, length = depResources.length; index !== length; index++) {
             resources.push(depResources[index]);
           }
@@ -92,7 +86,7 @@ function collectEntryResources(compilation, module, level = 0) {
     });
   }
 
-  _entryResourcesCache[module.index] = resources;
+  cache[module.index] = resources;
   return resources;
 }
 
