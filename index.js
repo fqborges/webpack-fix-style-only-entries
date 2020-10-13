@@ -55,7 +55,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
   }
 }
 
-function collectEntryResources(compilation, module, cache, level = 0) {
+function collectEntryResources(compilation, module, cache) {
   // module.index is unique per compilation
   // module.id can be null, not used here
   if (cache[module.index] !== undefined) {
@@ -77,7 +77,7 @@ function collectEntryResources(compilation, module, cache, level = 0) {
         const originModule = hasModuleGraphSupport ? compilation.moduleGraph.getParentModule(dep) : dep.originModule;
         const nextModule = module || originModule;
         if (nextModule) {
-          const depResources = collectEntryResources(compilation, nextModule, cache, level + 1);
+          const depResources = collectEntryResources(compilation, nextModule, cache);
           for (let index = 0, length = depResources.length; index !== length; index++) {
             resources.push(depResources[index]);
           }
