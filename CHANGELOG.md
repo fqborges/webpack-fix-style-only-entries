@@ -1,4 +1,8 @@
-## 0.5.2 (Jun 13, 2020)
+## 0.6.0 (Oct 13, 2020)
+ Being overly careful here, this version is not breaking for almost all the existing users. It could possibly break in some edge cases, since it changes how modules are collected (from global to one each compilation) or if you have a workaround for a working webpack multi configuration.
+ * BREAKING (POSSIBLY): Use a dedicated cache for every compilation (Prevent arbitrary files deletion when using Webpack with multi configurations) (PR [#39](https://github.com/fqborges/webpack-fix-style-only-entries/pull/39))
+
+## 0.5.2 (Oct 07, 2020)
  * Webpack 5 support using ModuleGraph API (PR [#38](https://github.com/fqborges/webpack-fix-style-only-entries/pull/38))
  * npm audit fix: ([ea9dd7](https://github.com/fqborges/webpack-fix-style-only-entries/commit/ea9dd7bd7ade5b16623064a4850de39545e1e18e))
 
