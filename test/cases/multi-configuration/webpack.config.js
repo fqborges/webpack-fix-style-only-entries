@@ -19,8 +19,6 @@ const baseConfig = {
   ],
 };
 
-console.log(__dirname + "../outputs");
-
 module.exports = [
   {
     entry: { scriptA: "./script.js", styleA: "./style.css" },

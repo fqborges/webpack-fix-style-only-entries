@@ -1,3 +1,15 @@
+## 0.6.1 (Oct 20, 2020)
+- In Webpack 5 fixed deprecation messages:
+    - DEP_WEBPACK_CHUNK_HAS_ENTRY_MODULE
+    - DEP_WEBPACK_CHUNK_ENTRY_MODULE
+    - DEP_WEBPACK_DEPRECATION_ARRAY_TO_SET
+    - DEP_WEBPACK_MODULE_INDEX
+ 
+- Update packages for Webpack 5.
+- Fix integration test script for using with Webpack 5.
+- Fix a BUG of `terser-webpack-plugin` (generate the futile file `vendor.js.LICENSE.txt`) in the production test `vendor+multi-js-entry-css-entry`.
+- Fix module structure in README.md.
+
 ## 0.6.0 (Oct 13, 2020)
  Being overly careful here, this version is not breaking for almost all the existing users. It could possibly break in some edge cases, since it changes how modules are collected (from global to one each compilation) or if you have a workaround for a working webpack multi configuration.
  * BREAKING (POSSIBLY): Use a dedicated cache for every compilation (Prevent arbitrary files deletion when using Webpack with multi configurations) (PR [#39](https://github.com/fqborges/webpack-fix-style-only-entries/pull/39))

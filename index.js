@@ -1,7 +1,9 @@
 const NAME = "webpack-fix-style-only-entries";
+const path = require("path");
 
 const defaultOptions = {
-  extensions: ["less", "scss", "css", "sass", "styl"],
+  extensions: ["css", "scss", "sass", "less", "styl"],
+  scriptExtensions: ["js", "mjs"],
   silent: false,
   ignore: undefined,
 };
@@ -9,45 +11,52 @@ const defaultOptions = {
 class WebpackFixStyleOnlyEntriesPlugin {
   constructor(options) {
     this.apply = this.apply.bind(this);
-
     this.options = Object.assign({}, defaultOptions, options);
   }
 
   apply(compiler) {
     const extensionsWithoutDots = this.options.extensions.map(e =>
-      e[0] === "." ? e.substring(1) : e
+        e[0] === "." ? e.substring(1) : e
     );
 
     const patternOneOfExtensions = extensionsWithoutDots
-      .map(ext => escapeRegExp(ext))
-      .join("|");
+        .map(ext => escapeRegExp(ext))
+        .join("|");
 
     const reStylesResource = new RegExp(
-      `[.](${patternOneOfExtensions})([?].*)?$`
+        `[.](${patternOneOfExtensions})([?].*)?$`
     );
 
     compiler.hooks.compilation.tap(NAME, compilation => {
       const resourcesCache = [];
-      compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
-        if (!file.endsWith(".js") && !file.endsWith(".mjs")) return;
-        if (!chunk.hasEntryModule()) return;
 
-        const rawResources = collectEntryResources(compilation, chunk.entryModule, resourcesCache);
+      compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
+        let fileExt = path.parse(file).ext.replace('.', '');
+
+        if (defaultOptions.scriptExtensions.indexOf(fileExt) < 0) return;
+        if (compilation.chunkGraph.getNumberOfEntryModules(chunk) < 1 ) return;
+
+        const entryModules = Array.from(compilation.chunkGraph.getChunkEntryModulesIterable(chunk));
+        if (entryModules.length < 1) return;
+
+        const entryModule = entryModules[0];
+        const rawResources = collectEntryResources(compilation, entryModule, resourcesCache);
         const resources = this.options.ignore
-          ? rawResources.filter(r => !r.match(this.options.ignore))
-          : rawResources;
+            ? rawResources.filter(r => !r.match(this.options.ignore))
+            : rawResources;
 
         const isStyleOnly =
-          resources.length &&
-          resources.every(resource => reStylesResource.test(resource));
+            resources.length &&
+            resources.every(resource => reStylesResource.test(resource));
+
         if (isStyleOnly) {
           if (!this.options.silent) {
-            console.error(
-              "webpack-fix-style-only-entries: removing js from style only module: " +
+            console.log(
+                "[webpack-fix-style-only-entries] removing js from style only module: " +
                 file
             );
           }
-          chunk.files = chunk.files.filter(f => f != file);
+          chunk.files.delete(file);
           delete compilation.assets[file];
         }
       });
@@ -56,15 +65,17 @@ class WebpackFixStyleOnlyEntriesPlugin {
 }
 
 function collectEntryResources(compilation, module, cache) {
-  // module.index is unique per compilation
+  const index = compilation.moduleGraph.getPreOrderIndex(module);
+
+  // index of module is unique per compilation
   // module.id can be null, not used here
-  if (cache[module.index] !== undefined) {
-    return cache[module.index];
+  if (cache[index] !== undefined) {
+    return cache[index];
   }
 
   if (typeof module.resource == "string") {
     const resources = [module.resource];
-    cache[module.index] = resources;
+    cache[index] = resources;
     return resources;
   }
 
@@ -86,7 +97,7 @@ function collectEntryResources(compilation, module, cache) {
     });
   }
 
-  cache[module.index] = resources;
+  cache[index] = resources;
   return resources;
 }
 
@@ -96,8 +107,8 @@ const reHasRegExpChar = RegExp(reRegExpChar.source);
 function escapeRegExp(string) {
   string = String(string);
   return string && reHasRegExpChar.test(string)
-    ? string.replace(reRegExpChar, "\\$&")
-    : string;
+      ? string.replace(reRegExpChar, "\\$&")
+      : string;
 }
 
 module.exports = WebpackFixStyleOnlyEntriesPlugin;
