@@ -34,6 +34,7 @@ module.exports = {
         "styles": ["./common/styles.css", "./app/styles.css"]
     },
     module: {
+        rules: [
             {
                 test: /\.css$/,
                 use: [

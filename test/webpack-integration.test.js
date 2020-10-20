@@ -4,7 +4,7 @@ const fs = require("fs");
 var rimraf = require("rimraf");
 const path = require("path");
 const webpack = require("webpack");
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 
 const modes = ["development", "production"];
 const cases = fs.readdirSync(path.join(__dirname, "cases"));
