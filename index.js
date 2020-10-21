@@ -34,7 +34,7 @@ class WebpackFixStyleOnlyEntriesPlugin {
         if (isNotScript) return;
 
         // has entry modules
-        if (compilation.chunkGraph.getNumberOfEntryModules(chunk) < 1 ) return;
+        if (compilation.chunkGraph.getNumberOfEntryModules(chunk) < 1) return;
         const entryModules = Array.from(compilation.chunkGraph.getChunkEntryModulesIterable(chunk));
         if (entryModules.length < 1) return;
 
