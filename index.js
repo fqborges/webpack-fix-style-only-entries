@@ -1,5 +1,4 @@
 const NAME = "webpack-fix-style-only-entries";
-const path = require("path");
 
 const defaultOptions = {
   extensions: ["css", "scss", "sass", "less", "styl"],
@@ -31,11 +30,11 @@ class WebpackFixStyleOnlyEntriesPlugin {
       const resourcesCache = [];
 
       compilation.hooks.chunkAsset.tap(NAME, (chunk, file) => {
-        let fileExt = path.parse(file).ext.replace('.', '');
+        let isNotScript = defaultOptions.scriptExtensions.every((ext) => file.lastIndexOf('.' + ext) < 0);
+        if (isNotScript) return;
 
-        if (defaultOptions.scriptExtensions.indexOf(fileExt) < 0) return;
+        // has entry modules
         if (compilation.chunkGraph.getNumberOfEntryModules(chunk) < 1 ) return;
-
         const entryModules = Array.from(compilation.chunkGraph.getChunkEntryModulesIterable(chunk));
         if (entryModules.length < 1) return;
 
