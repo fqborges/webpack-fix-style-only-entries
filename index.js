@@ -47,7 +47,8 @@ class WebpackFixStyleOnlyEntriesPlugin {
                 file
             );
           }
-          chunk.files = chunk.files.filter(f => f != file);
+          const filtered = [...chunk.files].filter(f => f != file);
+          chunk.files = (chunk.files instanceof Set) ? new Set(filtered) : filtered;
           delete compilation.assets[file];
         }
       });
