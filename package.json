@@ -1,6 +1,6 @@
 {
   "name": "webpack-fix-style-only-entries",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Package to fix style (css/sass/less/stylus) only entries generating a extra js file.",
   "main": "index.js",
   "files": [

@@ -1,3 +1,6 @@
+## 0.6.1 (Jan 18, 2021) 
+ * fix: [DEP_WEBPACK_DEPRECATION_ARRAY_TO_SET] webpack5 compatibility (PR [#43](https://github.com/fqborges/webpack-fix-style-only-entries/pull/43/commits))
+
 ## 0.6.0 (Oct 13, 2020)
  Being overly careful here, this version is not breaking for almost all the existing users. It could possibly break in some edge cases, since it changes how modules are collected (from global to one each compilation) or if you have a workaround for a working webpack multi configuration.
  * BREAKING (POSSIBLY): Use a dedicated cache for every compilation (Prevent arbitrary files deletion when using Webpack with multi configurations) (PR [#39](https://github.com/fqborges/webpack-fix-style-only-entries/pull/39))
