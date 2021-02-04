@@ -4,6 +4,8 @@
 
 This is a small plugin developed to solve the problem of having a style only entry (css/sass/less/stylus) generating an extra js file.
 
+> :warning: **the current version is not compatible with webpack 5!!** For webpack 5 try this fork: https://github.com/webdiscus/webpack-remove-empty-scripts
+
 You can find more info by reading the following issues:
 
  - https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/518
