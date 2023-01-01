@@ -21,13 +21,13 @@
   "license": "ISC",
   "repository": "github:fqborges/webpack-fix-style-only-entries",
   "devDependencies": {
-    "css-loader": "^3.5.3",
+    "css-loader": "^6.7.3",
     "fs": "^0.0.1-security",
     "jest": "^26.0.1",
-    "mini-css-extract-plugin": "^0.9.0",
+    "mini-css-extract-plugin": "^2.7.2",
     "moment": "^2.25.3",
     "rimraf": "^3.0.2",
-    "webpack": "^4.43.0",
+    "webpack": "^5.75.0",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.2.2"
   }
